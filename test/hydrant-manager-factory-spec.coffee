@@ -17,7 +17,7 @@ describe 'HydrantManagerFactory', ->
 
   describe 'build', ->
     beforeEach ->
-      @hydrantManager = @sut.build 'some-uuid'
+      @hydrantManager = @sut.build()
 
     it 'should create a HydrantManager', ->
       expect(@hydrantManager).to.be.an.instanceOf HydrantManager

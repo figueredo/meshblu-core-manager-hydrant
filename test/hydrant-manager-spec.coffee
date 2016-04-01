@@ -10,7 +10,6 @@ describe 'HydrantManager', ->
 
     hydrantClient = redis.createClient @redisKey
     @sut = new HydrantManager {
-      uuid: 'some-uuid'
       @uuidAliasResolver
       client: hydrantClient
     }
@@ -19,7 +18,7 @@ describe 'HydrantManager', ->
     beforeEach (done) ->
       @nonce = Date.now()
       @sut.once 'message', (@message) => done()
-      @sut.connect =>
+      @sut.connect uuid: 'some-uuid', =>
         @client.publish 'some-uuid', @nonce, (error) =>
           return done error if error?
 

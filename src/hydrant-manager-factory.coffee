@@ -5,8 +5,8 @@ HydrantManager = require '..'
 class HydrantManagerFactory
   constructor: ({@uuidAliasResolver, @namespace, @redisUri}) ->
 
-  build: (uuid) =>
+  build: =>
     client = new RedisNS @namespace, redis.createClient(@redisUri)
-    new HydrantManager {uuid, client, @uuidAliasResolver}
+    new HydrantManager {client, @uuidAliasResolver}
 
 module.exports = HydrantManagerFactory

@@ -1,14 +1,13 @@
 uuid           = require 'uuid'
-redis          = require 'fakeredis'
+redis          = require 'ioredis'
 HydrantManager = require '..'
 
 describe 'HydrantManager', ->
   beforeEach ->
-    @redisKey = uuid.v1()
-    @client = redis.createClient @redisKey
+    @client = redis.createClient()
     @uuidAliasResolver = resolve: (uuid, callback) => callback(null, uuid)
 
-    hydrantClient = redis.createClient @redisKey
+    hydrantClient = redis.createClient()
     @sut = new HydrantManager {
       @uuidAliasResolver
       client: hydrantClient

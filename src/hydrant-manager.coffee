@@ -11,6 +11,11 @@ class HydrantManager extends EventEmitter2
         return callback error if error?
         @client.on 'message', @_onMessage
         @client.subscribe uuid, callback
+        callback = ->
+
+    @client.once 'error', (error) =>
+      callback error
+      callback = ->
 
   close: =>
     if @client.disconnect?

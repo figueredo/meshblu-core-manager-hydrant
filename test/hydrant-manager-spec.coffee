@@ -3,10 +3,12 @@ redis          = require 'ioredis'
 HydrantManager = require '..'
 
 describe 'HydrantManager', ->
-  beforeEach ->
+  beforeEach (done) ->
     @client = redis.createClient()
     @uuidAliasResolver = resolve: (uuid, callback) => callback(null, uuid)
+    @client.on 'ready', done
 
+  beforeEach 'hydrant setup', ->
     hydrantClient = redis.createClient()
     @sut = new HydrantManager {
       @uuidAliasResolver

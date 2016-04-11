@@ -10,8 +10,9 @@ class HydrantManager extends EventEmitter2
       @uuidAliasResolver.resolve uuid, (error, uuid) =>
         return callback error if error?
         @client.on 'message', @_onMessage
-        @client.subscribe uuid, callback
-        callback = ->
+        @client.subscribe uuid, (error) =>
+          callback error
+          callback = ->
 
     @client.once 'error', (error) =>
       callback error

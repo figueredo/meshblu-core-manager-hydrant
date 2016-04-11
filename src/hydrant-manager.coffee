@@ -12,7 +12,7 @@ class HydrantManager extends EventEmitter2
       @client.subscribe uuid, callback
 
   close: =>
-    if @client.quit?
+    if @client.disconnect?
       @client.quit()
       @client.disconnect false
       return

@@ -1,4 +1,4 @@
-redis          = require 'redis'
+redis          = require 'ioredis'
 RedisNS        = require '@octoblu/redis-ns'
 HydrantManager = require '..'
 

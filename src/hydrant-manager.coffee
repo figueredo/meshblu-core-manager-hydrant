@@ -6,13 +6,20 @@ class HydrantManager extends EventEmitter2
     throw new Error('HydrantManager: uuidAliasResolver is required') unless @uuidAliasResolver?
 
   connect: ({uuid}, callback) =>
+    if @client.loading == 0
+      @_connect {uuid}, callback
+      return
+      
     @client.once 'ready', =>
-      @uuidAliasResolver.resolve uuid, (error, uuid) =>
-        return callback error if error?
-        @client.on 'message', @_onMessage
-        @client.subscribe uuid, (error) =>
-          callback error
-          callback = ->
+      @_connect {uuid}, callback
+
+  _connect: ({uuid}, callback) =>
+    @uuidAliasResolver.resolve uuid, (error, uuid) =>
+      return callback error if error?
+      @client.on 'message', @_onMessage
+      @client.subscribe uuid, (error) =>
+        callback error
+        callback = ->
 
     @client.once 'error', (error) =>
       callback error

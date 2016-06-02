@@ -6,14 +6,10 @@ class MultiHydrantManager extends EventEmitter2
     throw new Error('MultiHydrantManager: uuidAliasResolver is required') unless @uuidAliasResolver?
 
   connect: (callback) =>
-    @client.once 'ready', =>
+    @client.ping (error) =>
+      return callback error if error?
       @client.on 'message', @_onMessage
       callback()
-      callback = ->
-
-    @client.once 'error', (error) =>
-      callback error
-      callback = ->
 
   subscribe: ({uuid}, callback) =>
     @uuidAliasResolver.resolve uuid, (error, uuid) =>

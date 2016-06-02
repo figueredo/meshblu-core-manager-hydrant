@@ -1,15 +1,15 @@
 uuid                = require 'uuid'
-redis               = require 'ioredis'
+Redis               = require 'ioredis'
 MultiHydrantManager = require '../src/multi-hydrant-manager'
 
 describe 'MultiHydrantManager', ->
   beforeEach (done) ->
-    @client = redis.createClient()
+    @client = new Redis dropBufferSupport: true
     @uuidAliasResolver = resolve: (uuid, callback) => callback(null, uuid)
     @client.on 'ready', done
 
   beforeEach 'hydrant setup', ->
-    hydrantClient = redis.createClient()
+    hydrantClient = new Redis dropBufferSupport: true
     @sut = new MultiHydrantManager {
       @uuidAliasResolver
       client: hydrantClient

@@ -1,4 +1,4 @@
-redis          = require 'ioredis'
+Redis          = require 'ioredis'
 RedisNS        = require '@octoblu/redis-ns'
 HydrantManager = require '..'
 
@@ -9,7 +9,7 @@ class HydrantManagerFactory
     throw new Error('HydrantManagerFactory: uuidAliasResolver is required') unless @uuidAliasResolver?
 
   build: =>
-    client = new RedisNS @namespace, redis.createClient(@redisUri)
+    client = new RedisNS @namespace, new Redis @redisUri, dropBufferSupport: true
     new HydrantManager {client, @uuidAliasResolver}
 
 module.exports = HydrantManagerFactory

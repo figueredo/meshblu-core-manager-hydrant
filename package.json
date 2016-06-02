@@ -1,6 +1,6 @@
 {
   "name": "meshblu-core-manager-hydrant",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Connect the Firehose",
   "main": "index.js",
   "scripts": {
@@ -39,5 +39,8 @@
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "uuid": "^2.0.1"
+  },
+  "optionalDependencies": {
+    "hiredis": "^0.4.1"
   }
 }

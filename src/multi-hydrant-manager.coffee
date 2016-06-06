@@ -17,6 +17,9 @@ class MultiHydrantManager extends EventEmitter2
       @client.subscribe uuid, callback
 
   close: =>
+    @client.on 'error', (error) =>
+      # silently ignore
+      
     if @client.disconnect?
       @client.quit()
       @client.disconnect false

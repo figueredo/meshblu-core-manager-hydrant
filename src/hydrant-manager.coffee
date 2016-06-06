@@ -18,7 +18,7 @@ class HydrantManager extends EventEmitter2
       # silently ignore
 
     if @client.disconnect?
-      @client.quit()
+      @client.quit => # ignore error
       @client.disconnect false
       return
     @client.end true

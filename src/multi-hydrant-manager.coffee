@@ -19,9 +19,9 @@ class MultiHydrantManager extends EventEmitter2
   close: =>
     @client.on 'error', (error) =>
       # silently ignore
-      
+
     if @client.disconnect?
-      @client.quit()
+      @client.quit => # ignore error
       @client.disconnect false
       return
     @client.end true

@@ -1,3 +1,4 @@
+_                   = require 'lodash'
 uuid                = require 'uuid'
 Redis               = require 'ioredis'
 MultiHydrantManager = require '../src/multi-hydrant-manager'
@@ -18,13 +19,17 @@ describe 'MultiHydrantManager', ->
   describe 'connect', ->
     beforeEach (done) ->
       @nonce = Date.now()
-      @sut.once 'message', (@channel, @message) => done()
+      doneTwice = _.after 2, done
+      @sut.once 'message', (@channel, @message) => doneTwice()
       @sut.connect (error) =>
         return done error if error?
         @sut.subscribe uuid: 'some-uuid', (error) =>
           return done error if error?
           @client.publish 'some-uuid', @nonce, (error) =>
             return done error if error?
+            @sut.unsubscribe uuid: 'some-uuid', (error) =>
+              return done error if error?
+              doneTwice()
 
     it 'should receive a channel and message', ->
       expect(@message).to.equal @nonce

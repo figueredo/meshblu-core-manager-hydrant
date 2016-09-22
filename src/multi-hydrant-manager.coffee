@@ -16,6 +16,11 @@ class MultiHydrantManager extends EventEmitter2
       return callback error if error?
       @client.subscribe uuid, callback
 
+  unsubscribe: ({uuid}, callback) =>
+    @uuidAliasResolver.resolve uuid, (error, uuid) =>
+      return callback error if error?
+      @client.unsubscribe uuid, callback
+
   close: =>
     @client.on 'error', (error) =>
       # silently ignore

@@ -23,6 +23,7 @@ class MultiHydrantManager extends EventEmitter2
 
   close: =>
     @client.on 'error', (error) =>
+      console.error error.stack
       # silently ignore
 
     if @client.disconnect?

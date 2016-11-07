@@ -20,7 +20,7 @@ describe 'MultiHydrantManager', ->
     beforeEach (done) ->
       @nonce = Date.now()
       doneTwice = _.after 2, done
-      @sut.once 'message', (@channel, @message) => doneTwice()
+      @sut.once 'message:some-uuid', (@message) => doneTwice()
       @sut.connect (error) =>
         return done error if error?
         @sut.subscribe uuid: 'some-uuid', (error) =>
@@ -33,4 +33,31 @@ describe 'MultiHydrantManager', ->
 
     it 'should receive a channel and message', ->
       expect(@message).to.equal @nonce
-      expect(@channel).to.equal 'some-uuid'
+
+  describe 'two connections', ->
+    beforeEach (done) ->
+      @sut.connect (error) =>
+        return done error if error?
+        @sut.subscribe uuid: 'some-uuid', done
+
+    beforeEach (done) ->
+      @nonce = Date.now()
+      doneTwice = _.after 2, done
+      @sut.once 'message:some-uuid', (@message) => doneTwice()
+      @sut.connect (error) =>
+        return done error if error?
+        @sut.subscribe uuid: 'some-uuid', (error) =>
+          return done error if error?
+          @sut.unsubscribe uuid: 'some-uuid', (error) =>
+            return done error if error?
+            @client.publish 'some-uuid', @nonce, (error) =>
+              return done error if error?
+              @sut.unsubscribe uuid: 'some-uuid', (error) =>
+                return done error if error?
+                doneTwice()
+
+    it 'should still receive a channel and message', ->
+      expect(@message).to.equal @nonce
+
+    it 'should no longer have a subscription', ->
+      expect(@sut._subscriptions['some-uuid']).to.be.empty
